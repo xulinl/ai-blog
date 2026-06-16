@@ -1,65 +1,98 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, Code2, Cpu, Layers } from "lucide-react";
+import { getPosts } from "@/lib/content";
+
+const ICONS = [Code2, Cpu, Layers];
 
 export default function Home() {
+  const featured = getPosts("notes").slice(0, 3);
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main>
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 xl:px-8">
+          <div className="max-w-3xl">
+            <p className="text-sm font-medium text-primary mb-4 tracking-wide uppercase">
+              Exploring AI-Native Engineering
+            </p>
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground leading-tight">
+              AI-Native 工程的
+              <br />
+              <span className="text-primary">探索、记录、构建</span>
+            </h1>
+            <p className="mt-6 text-lg text-muted-foreground max-w-2xl leading-relaxed">
+              一个软件工程师的 AI 工程实践笔记。记录 Claude Code、Agent
+              架构、MCP 协议、Prompt Engineering
+              等前沿技术的学习过程与工程落地经验。
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/notes"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-emerald-600 transition-colors"
+              >
+                开始阅读
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/claude-code"
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-accent transition-colors"
+              >
+                Claude Code 专题
+              </Link>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Background decoration */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute -top-40 right-0 w-[600px] h-[600px] rounded-full bg-emerald-500/5 blur-3xl" />
+          <div className="absolute top-20 -right-20 w-[400px] h-[400px] rounded-full bg-emerald-500/10 blur-3xl" />
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Featured posts */}
+      <section className="mx-auto max-w-7xl px-6 pb-24 xl:px-8">
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
+            精选笔记
+          </h2>
+          <Link
+            href="/notes"
+            className="text-sm font-medium text-primary hover:text-emerald-600 transition-colors inline-flex items-center gap-1"
+          >
+            查看全部
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((post, i) => {
+            const Icon = ICONS[i % ICONS.length];
+            return (
+              <Link
+                key={post.slug}
+                href={`/notes/${post.slug}`}
+                className="group rounded-xl border border-border bg-card p-6 hover:border-emerald-200 dark:hover:border-emerald-800 hover:shadow-sm transition-all"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-primary">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                    {post.tag}
+                  </span>
+                </div>
+                <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors mb-2">
+                  {post.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {post.desc}
+                </p>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+    </main>
   );
 }
